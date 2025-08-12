@@ -1,12 +1,11 @@
 package com.ll.domain.wiseSaying.wiseSaying.controller
 
 import com.ll.Rq
-import com.ll.WiseSaying
+import com.ll.domain.wiseSaying.wiseSaying.service.WiseSayingService
 
 class WiseSayingController {
+    private val wiseSayingService = WiseSayingService()
 
-    private var lastId = 0
-    private val wiseSayings = mutableListOf<WiseSaying>()
 
 
     fun actionWrite(rq: Rq) {
@@ -15,15 +14,13 @@ class WiseSayingController {
         print("작가 : ")
         val author = readlnOrNull()!!.trim()
 
-        val id = ++lastId
+        val wiseSaying = wiseSayingService.write(content, author)
 
-        wiseSayings.add(WiseSaying(id, content, author))
-
-        println("${id}번 명언이 등록되었습니다.")
+        println("${wiseSaying.id}번 명언이 등록되었습니다.")
     }
 
     fun actionList(rq: Rq) {
-        if (wiseSayings.isEmpty()) {
+        if (wiseSayingService.isEmpty()) {
             println("등록된 명언이 없습니다.")
             return
         }
@@ -33,9 +30,8 @@ class WiseSayingController {
 
 //            for( wiseSaying in wiseSayings){
 //                println("${wiseSaying.id} / ${wiseSaying.author} / ${wiseSaying.content}")
-
-        wiseSayings.forEach {
-            println("${it.id} / ${it.author}/${it.content}")
+        wiseSayingService.findAll().forEach{
+            println("${it.id}/ ${it.author}/ ${it.content}")
         }
     }
 
@@ -47,16 +43,9 @@ class WiseSayingController {
             return
         }
 
-//                val removed =wiseSayings.removeIf { it.id == id }
-//
-//                if(removed) {
-//                    println("${id}번 명언을 삭제하였습니다.")
-//                } else{
-//                    println("${id}번 명언은 존재하지 않습니다.")
-//
-//                }
+        val wiseSaying = wiseSayingService
+            .findById(id)
 
-        val wiseSaying = wiseSayings.firstOrNull { it.id == id }
 
         if (wiseSaying == null) {
             println("${id}번 명언은 존재하지 않습니다. ")
@@ -65,7 +54,7 @@ class WiseSayingController {
 
         // 여기서부터는 wiseSaying 변수가 nullable 이 아님, 스마트 캐스트
 
-        wiseSayings.remove(wiseSaying)
+        wiseSayingService.delete(wiseSaying)
 
         println("${id}번 명언을 삭제하였습니다.")
     }
@@ -78,7 +67,7 @@ class WiseSayingController {
             return
         }
 
-        val wiseSaying = wiseSayings.firstOrNull { it.id == id }
+        val wiseSaying = wiseSayingService.findById(id)
 
         if (wiseSaying == null) {
             println("${id}번 명언은 존재하지 않습니다.")
@@ -93,7 +82,7 @@ class WiseSayingController {
         print("작가 : ")
         val author = readlnOrNull()!!.trim()
 
-        wiseSaying.update(content, author)
+        wiseSayingService.modify(wiseSaying, author, content)
 
         println("${id}번 명언을 수정하였습니다.")
     }
