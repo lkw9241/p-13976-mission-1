@@ -9,9 +9,9 @@ class WiseSayingController {
 
 
     fun actionWrite(rq: Rq) {
-        print("명언 : ")
+        print("명언:")
         val content = readlnOrNull()!!.trim()
-        print("작가 : ")
+        print("작가:")
         val author = readlnOrNull()!!.trim()
 
         val wiseSaying = wiseSayingService.write(content, author)

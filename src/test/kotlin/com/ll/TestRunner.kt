@@ -6,8 +6,8 @@ import java.io.InputStream
 import java.io.PrintStream
 
 object TestRunner {
-    private val originalIn: InputStream = System.`in`
-    private val originalOut: PrintStream = System.out
+    private val originalIn: InputStream = System.`in` // 키보드. in만 ``을 쓰는 이유는 코틀린에서 in이 특별한 키워드이기 때문.
+    private val originalOut: PrintStream = System.out // 모니터
 
     fun run(input: String): String {
         // 표준 입력 리다이렉팅
@@ -26,13 +26,13 @@ object TestRunner {
 
         System.setOut(printStream)
 
-        App().run()
+        App().run() // 앱실행
 
         // 표준 출력 결과를 문자열로 변환
         val result = outputStream
             .toString()
             .trim()
-            .replace(Regex("\\r\\n"), "\n") // 개행문자 차이 표준화
+            .replace(Regex("\\r\\n"), "\n") // 개행문자 차이 표준화(윈도우와/맥의 차이)
 
         // 다시 표준 입력으로 복구
         System.setIn(originalIn)
