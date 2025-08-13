@@ -31,7 +31,7 @@ class WiseSayingController {
 //            for( wiseSaying in wiseSayings){
 //                println("${wiseSaying.id} / ${wiseSaying.author} / ${wiseSaying.content}")
         wiseSayingService.findAll().forEach{
-            println("${it.id}/ ${it.author}/ ${it.content}")
+            println("${it.id} / ${it.author} / ${it.content}")
         }
     }
 
